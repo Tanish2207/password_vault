@@ -403,9 +403,8 @@ class LoginSignupApp(VaultBackend):
             self.handle_signup(username, password)
 
     def handle_login(self, username, password):
-        """Handles login logic (to be connected to backend)."""
         try:
-            with open("user_details.txt", 'r') as f:
+            with open("./user_details.txt", 'r') as f:
                 users = f.readlines()
                 for user in users:
                     stored_username, stored_password = user.strip().split(":")
@@ -418,11 +417,14 @@ class LoginSignupApp(VaultBackend):
             messagebox.showerror("Login Failed", "No users found. Please sign up first.")
 
     def handle_signup(self, username, password):
-        """Handles signup logic (to be connected to backend)."""
-        with open("user_details.txt", 'a') as f:
-            f.write(username + ":" + password + "\n")
-        messagebox.showinfo("Signup Successful", f"Account created successfully, {username}!")
-        self.open_encryption_setup(username)
+        if os.path.exists("user_details.txt"):
+            messagebox.showerror("SignUp Failed", "There is already one user signed in! Delete the prev user first")
+            return
+        else:
+            with open("user_details.txt", 'a') as f:
+                f.write(username + ":" + password + "\n")
+            messagebox.showinfo("Signup Successful", f"Account created successfully, {username}!")
+            self.open_encryption_setup(username)
 
     def open_home(self, username):
         self.root.destroy()  # Close the login/signup window
