@@ -60,31 +60,31 @@ class PasswordManagerApp(VaultBackend):
         self.root = root
         self.root.title("1Password - Password Manager")
         self.root.geometry("600x400")
-        self.root.configure(bg="black")
+        self.root.configure(bg="#252420")
         self.load_existing_key("finalkeys.key")
 
         # Header
-        self.header_label = tk.Label(root, text="1Password", bg="black", fg="white", font=("Arial", 16, "bold"))
+        self.header_label = tk.Label(root, text="1Password", bg="#252420", fg="white", font=("Arial", 16, "bold"))
         self.header_label.pack(pady=10)
 
         # Welcome Message
         self.welcome_label = tk.Label(
             root,
             text=f"Welcome back, {username}!",
-            bg="black",
+            bg="#252420",
             fg="white",
             font=("Arial", 14)
         )
         self.welcome_label.pack(pady=5)
 
         # Password List
-        self.password_list_frame = tk.Frame(root, bg="black")
+        self.password_list_frame = tk.Frame(root, bg="#252420")
         self.password_list_frame.pack(pady=10)
 
         self.password_list_label = tk.Label(
             self.password_list_frame,
             text="List of my passwords",
-            bg="black",
+            bg="#252420",
             fg="white",
             font=("Arial", 12, "bold")
         )
@@ -100,7 +100,7 @@ class PasswordManagerApp(VaultBackend):
         self.add_password_button.grid(row=0, column=1, padx=10)
 
         # Table Frame
-        self.table_frame = tk.Frame(root, bg="black")
+        self.table_frame = tk.Frame(root, bg="#252420")
         self.table_frame.pack(pady=20)
 
         # Example data
@@ -127,12 +127,17 @@ class PasswordManagerApp(VaultBackend):
         for widget in self.table_frame.winfo_children():
             widget.destroy()
 
-        tk.Label(self.table_frame, text="Site", bg="black", fg="white", font=("Arial", 12, "bold")).grid(row=0, column=0, padx=10)
-        tk.Label(self.table_frame, text="Password", bg="black", fg="white", font=("Arial", 12, "bold")).grid(row=0, column=1, padx=10)
+        tk.Label(self.table_frame, text="Site", bg="#252420", fg="white", font=("Arial", 12, "bold")).grid(row=0, column=0, padx=10)
+        tk.Label(self.table_frame, text="Password", bg="#252420", fg="white", font=("Arial", 12, "bold")).grid(row=0, column=1, padx=10)
 
         for i, (s, p) in enumerate(self.pwd_dict.items()):
-            tk.Label(self.table_frame, text=s, bg="black", fg="white", font=("Arial", 12)).grid(row=i + 1, column=0, padx=10)
-            tk.Label(self.table_frame, text=p, bg="black", fg="white", font=("Arial", 12)).grid(row=i + 1, column=1, padx=10)
+            tk.Label(self.table_frame, text=s, bg="#252420", fg="white", font=("Arial", 12)).grid(row=i + 1, column=0, padx=10)
+            password_label = tk.Label(self.table_frame, text="*" * len(p), bg="#252420", fg="white", font=("Arial", 12))
+            password_label.grid(row=i + 1, column=1, padx=10)
+
+            # Bind events to show and hide the password
+            password_label.bind("<Enter>", lambda e, lbl=password_label, pwd=p: lbl.config(text=pwd))
+            password_label.bind("<Leave>", lambda e, lbl=password_label, pwd=p: lbl.config(text="*" * len(pwd)))
 
     def add_password_window(self):
         """Opens a new window to add a password."""
@@ -142,20 +147,20 @@ class PasswordManagerApp(VaultBackend):
         add_window = tk.Toplevel(self.root)
         add_window.title("Add New Password")
         add_window.geometry("400x300")
-        add_window.configure(bg="black")
+        add_window.configure(bg="#252420")
 
         # Header
-        header_label = tk.Label(add_window, text="Add a New Password", bg="black", fg="white", font=("Arial", 16, "bold"))
+        header_label = tk.Label(add_window, text="Add a New Password", bg="#252420", fg="white", font=("Arial", 16, "bold"))
         header_label.pack(pady=20)
 
         # Site Entry
-        site_label = tk.Label(add_window, text="Site:", bg="black", fg="white", font=("Arial", 12))
+        site_label = tk.Label(add_window, text="Site:", bg="#252420", fg="white", font=("Arial", 12))
         site_label.pack(pady=5)
         site_entry = tk.Entry(add_window, width=30, font=("Arial", 12))
         site_entry.pack(pady=5)
 
         # Password Entry
-        password_label = tk.Label(add_window, text="Password:", bg="black", fg="white", font=("Arial", 12))
+        password_label = tk.Label(add_window, text="Password:", bg="#252420", fg="white", font=("Arial", 12))
         password_label.pack(pady=5)
         password_entry = tk.Entry(add_window, width=30, font=("Arial", 12))
         password_entry.pack(pady=5)
@@ -190,7 +195,7 @@ class PasswordManagerApp(VaultBackend):
         instructions_label = tk.Label(
             add_window,
             text="Make sure to save only strong passwords!",
-            bg="black",
+            bg="#252420",
             fg="white",
             font=("Arial", 10)
         )
@@ -203,18 +208,18 @@ class EncryptionSetupApp(VaultBackend):
         self.root = root
         self.root.title("1Password - Encryption Setup")
         self.root.geometry("600x400")
-        self.root.configure(bg="black")
+        self.root.configure(bg="#252420")
         self.username = username
 
         # Header
-        self.header_label = tk.Label(root, text="1Password", bg="black", fg="white", font=("Arial", 16, "bold"))
+        self.header_label = tk.Label(root, text="1Password", bg="#252420", fg="white", font=("Arial", 16, "bold"))
         self.header_label.pack(pady=20)
 
         # Welcome Message
         self.welcome_label = tk.Label(
             root, 
             text=f"Welcome to 1Password, {username}!", 
-            bg="black", 
+            bg="#252420", 
             fg="white", 
             font=("Arial", 14, "bold")
         )
@@ -229,7 +234,7 @@ class EncryptionSetupApp(VaultBackend):
                 "AES-256 is considered one of the most secure encryption algorithms available\n"
                 "and is widely used in the industry."
             ),
-            bg="black",
+            bg="#252420",
             fg="white",
             font=("Arial", 12),
             justify="center"
@@ -237,7 +242,7 @@ class EncryptionSetupApp(VaultBackend):
         self.encryption_info_label.pack(pady=20)
 
         # Buttons
-        self.button_frame = tk.Frame(root, bg="black")
+        self.button_frame = tk.Frame(root, bg="#252420")
         self.button_frame.pack(pady=20)
 
         self.generate_key_button = tk.Button(
@@ -271,14 +276,14 @@ class EncryptionSetupApp(VaultBackend):
         key_window = tk.Toplevel(self.root)
         key_window.title("Generated Key")
         key_window.geometry("500x300")
-        key_window.configure(bg="black")
+        key_window.configure(bg="#252420")
 
         # Header
-        header_label = tk.Label(key_window, text="Your Encryption Key", bg="black", fg="white", font=("Arial", 16, "bold"))
+        header_label = tk.Label(key_window, text="Your Encryption Key", bg="#252420", fg="white", font=("Arial", 16, "bold"))
         header_label.pack(pady=20)
 
         # Display Key
-        key_label = tk.Label(key_window, text="Here is your generated key:", bg="black", fg="white", font=("Arial", 12))
+        key_label = tk.Label(key_window, text="Here is your generated key:", bg="#252420", fg="white", font=("Arial", 12))
         key_label.pack(pady=10)
 
         key_entry = tk.Entry(key_window, width=40, font=("Arial", 14), justify="center")
@@ -312,7 +317,7 @@ class EncryptionSetupApp(VaultBackend):
         instructions_label = tk.Label(
             key_window,
             text="Keep this key safe! You will need it to access your encrypted data.",
-            bg="black",
+            bg="#252420",
             fg="white",
             font=("Arial", 10)
         )
@@ -332,14 +337,14 @@ class LoginSignupApp(VaultBackend):
         self.root = root
         self.root.title("1Password Login/Signup")
         self.root.geometry("400x300")
-        self.root.configure(bg="black")
+        self.root.configure(bg="#252420")
 
         # Header
-        self.header_label = tk.Label(root, text="1Password", bg="black", fg="white", font=("Arial", 16, "bold"))
+        self.header_label = tk.Label(root, text="1Password", bg="#252420", fg="white", font=("Arial", 16, "bold"))
         self.header_label.pack(pady=20)
 
         # Tabs for Login and Signup
-        self.tab_frame = tk.Frame(root, bg="black")
+        self.tab_frame = tk.Frame(root, bg="#252420")
         self.tab_frame.pack()
 
         self.login_button = tk.Button(self.tab_frame, text="Login", command=self.show_login, bg="yellow", width=10, font=("Arial", 12))
@@ -349,17 +354,17 @@ class LoginSignupApp(VaultBackend):
         self.signup_button.grid(row=0, column=1)
 
         # Form Frame
-        self.form_frame = tk.Frame(root, bg="black")
+        self.form_frame = tk.Frame(root, bg="#252420")
         self.form_frame.pack(pady=20)
 
         # Username
-        self.username_label = tk.Label(self.form_frame, text="Username:", bg="black", fg="white", font=("Arial", 12))
+        self.username_label = tk.Label(self.form_frame, text="Username:", bg="#252420", fg="white", font=("Arial", 12))
         self.username_label.grid(row=0, column=0, sticky="e", padx=10, pady=5)
         self.username_entry = tk.Entry(self.form_frame, width=25)
         self.username_entry.grid(row=0, column=1, pady=5)
 
         # Master Password
-        self.password_label = tk.Label(self.form_frame, text="Master password:", bg="black", fg="white", font=("Arial", 12))
+        self.password_label = tk.Label(self.form_frame, text="Master password:", bg="#252420", fg="white", font=("Arial", 12))
         self.password_label.grid(row=1, column=0, sticky="e", padx=10, pady=5)
         self.password_entry = tk.Entry(self.form_frame, width=25, show="*")
         self.password_entry.grid(row=1, column=1, pady=5)
@@ -375,7 +380,7 @@ class LoginSignupApp(VaultBackend):
     def show_login(self):
         """Switches to the login form."""
         self.current_mode = "Login"
-        self.login_button.configure(bg="yellow", fg="black")
+        self.login_button.configure(bg="yellow", fg="#252420")
         self.signup_button.configure(bg="gray", fg="white")
         self.username_entry.delete(0, tk.END)
         self.password_entry.delete(0, tk.END)
@@ -383,7 +388,7 @@ class LoginSignupApp(VaultBackend):
     def show_signup(self):
         """Switches to the signup form."""
         self.current_mode = "Sign Up"
-        self.signup_button.configure(bg="yellow", fg="black")
+        self.signup_button.configure(bg="yellow", fg="#252420")
         self.login_button.configure(bg="gray", fg="white")
         self.username_entry.delete(0, tk.END)
         self.password_entry.delete(0, tk.END)
@@ -442,5 +447,6 @@ class LoginSignupApp(VaultBackend):
 # Main Driver Code
 if __name__ == "__main__":
     root = tk.Tk()
+    root.config(bg="#252420")
     LoginSignupApp(root)
     root.mainloop()
